@@ -1,6 +1,6 @@
-import Game from './game';
+import lose from './game';
 import options from './options';
-import Fruit from './fruit';
+// import Fruit from './fruit';
 import { draw, clear } from './draw';
 
 const collides = (segments, point) => {
@@ -41,26 +41,25 @@ class Snake {
     // if head intersects walls, game over
     if (this.head[0] < 0 || this.head[0] >= options.width
         || this.head[1] < 0 || this.head[1] >= options.height) {
-      Game.lose();
+      lose();
       return;
     }
 
     // if head intersects segments, game over
     if (collides(this.segments, this.head)) {
-      Game.lose();
+      lose();
       return;
     }
     draw(this.head, '#000');
     // head intersects fruit, increment segments and score
-    if (this.collides(this.head, Game.fruit.location)) {
-      Game.score += 1;
-      clear(Game.fruit.location);
-      let fruit = new Fruit();
-      fruit.placeFruit();
-    // if not, clear last segment of snake
-    } else {
-      clear(this.segments.shift());
-    }
+    // if (this.collides(this.head, Game.fruit.location)) {
+    //   Game.score += 1;
+    //   clear(Game.fruit.location);
+    //   let fruit = new Fruit();
+    //   fruit.placeFruit();
+    // // if not, clear last segment of snake
+    // } else {
+    clear(this.segments.shift());
   }
 }
 

@@ -1,65 +1,57 @@
 import Snake from './snake';
 import Fruit from './fruit';
-import { draw, reset } from './draw';
+import { draw, redraw } from './draw';
 
+let score = 0;
 let highScore = 0;
-let snake = new Snake();
-let fruit = new Fruit();
 
-// Where the game engine runs, time ticks, state updated, win\lose conditions
-class Game {
-  constructor() {
-    this.score = 0;
-  }
+function gameStart() {
+  let snake = new Snake();
+  // let fruit = new Fruit();
+  // Fruit.placeFruit();
 
-  gameStart() {
-
-    fruit.placeFruit();
-    // initialize input event listeners
-    window.onkeydown = (e) => {
-      switch (e.key) {
-        default:
-          break;
-        case 'ArrowDown':
-          this.snake.turnRight();
-          break;
-        case 'ArrowUp':
-          this.snake.turnUp();
-          break;
-        case 'ArrowLeft':
-          this.snake.turnLeft();
-          break;
-        case 'ArrowRight':
-          this.snake.turnRight();
-          break;
-      }
-    };
-    this.tick(timestamp);
-  }
   // game loop
-  tick(timestamp) {
-    this.snake.move();
-    window.requestAnimationFrame(nextTimestamp => this.tick(nextTimestamp));
-  }
-  reset() {
-    if (this.score > highScore) {
-      highScore = this.score;
+  const tick = (timestamp) => {
+    snake.slither();
+    window.requestAnimationFrame(nextTimestamp => tick(nextTimestamp));
+  };
+  // initialize input event listeners
+  window.onkeydown = (e) => {
+    switch (e.key) {
+      default:
+        break;
+      case 'ArrowDown':
+        snake.turnRight();
+        break;
+      case 'ArrowUp':
+        snake.turnUp();
+        break;
+      case 'ArrowLeft':
+        snake.turnLeft();
+        break;
+      case 'ArrowRight':
+        snake.turnRight();
+        break;
     }
-    this.score = 0;
-    draw.reset();
-    game = new Game();
-    game.gameStart();
-  }
-
-  win() {
-    alert('you cheated');
-    this.reset();
-  }
-
-  lose() {
-    console.log('you lost'); // TODO add score and
-    this.reset();
-  }
+  };
 }
+const reset = () => {
+  if (score > highScore) {
+    highScore = score;
+  }
+  score = 0;
+  redraw();
+  gameStart();
+};
 
-export default Game;
+const win = () => {
+  alert('you cheated');
+  reset();
+};
+
+const lose = () => {
+  console.log('you lost'); // TODO add score and
+  reset();
+};
+
+export { gameStart, win, lose, score, reset };

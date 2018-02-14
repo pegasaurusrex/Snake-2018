@@ -9,11 +9,11 @@ class Fruit {
     // color = $
   }
   placeFruit() {
-    let freeSquares = [];
+    const freeSquares = [];
     for (let x = 0; x < options.width; x++) {
       for (let y = 0; y < options.height; y++) {
         let square = [x, y];
-        if (!collides(segments)) {
+        if (!collides(segments, square)) {
           freeSquares.push(square);
         }
       }

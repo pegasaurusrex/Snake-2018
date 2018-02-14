@@ -21,8 +21,8 @@ const clear = (square) => {
   ctx.clearRect(square[0], square[1], options.squareSize, options.squareSize);
 };
 
-const reset = () => {
+const redraw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
 
-export default { draw, clear, reset };
+export default { draw, clear, redraw };
