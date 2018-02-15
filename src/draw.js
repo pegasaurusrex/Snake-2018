@@ -4,10 +4,11 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 canvas.width = options.width;
 canvas.height = options.height;
+ctx.rect(0, 0, canvas.width, canvas.height);
 
 
 const draw = (square, color) => { // TODO shape?
-  ctx.rect(0, 0, canvas.width, canvas.height);
+  
   let [x, y, w, h] = [square[0] * options.squareSize,
                       square[1] * options.squareSize,
                       options.squareSize,

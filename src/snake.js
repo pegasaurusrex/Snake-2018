@@ -12,6 +12,10 @@ const collides = (segments, point) => {
   return false;
 };
 
+const clear = (square) => {
+  ctx.clearRect(square[0], square[1], options.squareSize, options.squareSize);
+};
+
 class Snake {
   constructor() {
     this.head = [options.initialX, options.initialY];
@@ -35,6 +39,7 @@ class Snake {
   slither() {
     // called on tick, updates snake position
     // move head in direction of latest input
+    console.log(segments);
     this.head[0] += this.dx;
     this.head[1] += this.dy;
     this.segments.push(this.head);
