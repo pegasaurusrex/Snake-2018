@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "Snake in ES6 Javascript",
   "main": "./src/entry.js",
+  "watch": {
+    "build": "webpack"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "npm-watch"
   },
   "author": "Andrew Quinn",
   "license": "MIT",
@@ -17,5 +21,8 @@
     "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.8.0",
     "webpack": "^3.11.0"
+  },
+  "dependencies": {
+    "npm-watch": "^0.3.0"
   }
 }

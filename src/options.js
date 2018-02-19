@@ -1,8 +1,8 @@
 const options = {
   width: 500,
   height: 500,
-  initialX: 200,
-  initialY: 200,
+  initialX: 10,
+  initialY: 10,
   squareSize: 10,
 };
 

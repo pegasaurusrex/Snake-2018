@@ -1,4 +1,10 @@
-import options from './options';
+const options = {
+  width: 500,
+  height: 500,
+  initialX: 10,
+  initialY: 10,
+  squareSize: 10,
+};
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -38,8 +44,8 @@ const collides = (segments, point) => {
 
 const draw = (square, color) => { // TODO shape?
 
-  const [x, y, w, h] = [square[0],
-                      square[1],
+  const [x, y, w, h] = [square[0] * options.squareSize,
+                      square[1] * options.squareSize,
                       options.squareSize,
                       options.squareSize,
                     ].map(Math.round);
@@ -47,10 +53,19 @@ const draw = (square, color) => { // TODO shape?
   ctx.fillRect(x, y, w, h);
 };
 
-
-const clear = (square) => {
+const drawFruit = (square, color) => {
   const [x, y, w, h] = [square[0],
                       square[1],
+                      options.squareSize,
+                      options.squareSize,
+                    ].map(Math.round);
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, w, h);  
+}
+
+const clear = (square) => {
+  const [x, y, w, h] = [square[0] * options.squareSize,
+                      square[1] * options.squareSize,
                       options.squareSize,
                       options.squareSize,
                     ].map(Math.round);
@@ -78,7 +93,8 @@ class Fruit {
       return;
     }
     this.location = freeSquares[Math.floor(Math.random() * freeSquares.length)];
-    draw(this.location, '#000');
+    console.log(this.location);
+    drawFruit(this.location, '#000');
   }
 }
 
@@ -104,6 +120,7 @@ class Snake {
   }
   lose() {
     console.log('you lost'); // TODO add score and
+    alert('lost');
     snake = new Snake();
     [snake.dx, snake.dy] = [0, 1];
   }
@@ -116,9 +133,11 @@ class Snake {
     this.segments.push([this.head[0], this.head[1]]);
 
     // if head intersects walls, game over
-    if (this.head[0] < 0 || this.head[0] >= options.width
-        || this.head[1] < 0 || this.head[1] >= options.height) {
+    if    (this.head[0] <= 0 || this.head[0] >= (options.width / 10)
+        || this.head[1] <= 0 || this.head[1] >= (options.height / 10)) {
       this.lose();
+       
+      //TBD: snake collisions
       return;
     }
     draw(this.head, '#000');
@@ -143,13 +162,12 @@ let snake = new Snake();
 let fruit = new Fruit();
 fruit.placeFruit();
 let start = 0;
-const tick = (timestamp) => {
-  snake.slither();
-    window.requestAnimationFrame(nextTimestamp => tick(nextTimestamp));
-
+function tick() {
+    snake.slither();
 };
+
 snake.turnRight();
-tick(start);
+setInterval(tick, 120);
 // snake.turnRight();
 // snake.slither();
 // snake.slither();
