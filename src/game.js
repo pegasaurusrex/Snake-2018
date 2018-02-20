@@ -1,7 +1,7 @@
 import { Snake } from './snake';
 import * as options from './options';
 import * as SquareContent from './square-defines';
-
+import drawBoard from './draw';
 
 // const SquareContent = {
 //   FreeSpace: 0,
@@ -16,44 +16,61 @@ export class Game {
     this.board = null;
     this.score = 0;
     this.squaresNeededToWin = 0;
+    this.snake = new Snake();
+    this.startRow = options.initialY;
+    this.startCol = options.initialX;
   }
   newGame() {
     this.board = new Array(options.height);
-    for (let row = 0; row < options.width; row++) {
+    for (let row = 0; row < options.height; row++) {
       this.board[row] = new Array(options.width);
-      for (let col = 0; col < options.height; col++) {
-
+      for (let col = 0; col < options.width; col++) {
         // draw walls around the edges
-        if (row == 0 || row == options.height-1 ||
-            col == 0 || col == options.width-1)
-        {
+        if (row === 0 || row === options.height - 1 ||
+            col === 0 || col === options.width - 1) {
           this.board[row][col] = SquareContent.Wall;
-        }
-        else  // otherwise it's a free space
-        {
+        } else {
+          // otherwise it's a free space
           this.board[row][col] = SquareContent.FreeSpace;
           this.squaresNeededToWin++;
         }
       }
     }
-
-    let snake = new Snake();
-    snake.init();
-    placeFruit();
+    this.board[this.startRow][this.startCol] = SquareContent.Snake;
+    this.snake = new Snake();
+    this.snake.turnRight();
+    this.placeFruit();
     drawBoard();
-    updateScore();
+    this.updateScore();    
   }
+  lose() {
+    console.log('you lost');
+    this.newGame();
+  }
+  win() {
+    console.log('you won!');
+    this.newGame();
+  }
+  updateScore(number) {
+    if (number === 1) {
+      this.score += 1;
+    } else {
+      this.score = 0;
+    }
+    document.getElementById('score').innerHTML = this.score * 1000;
+  }
+
+  placeFruit() {
+    while (true) {
+      let randomX = Math.floor(Math.random() * options.width);
+      let randomY = Math.floor(Math.random() * options.height);
+      if (this.board[randomY][randomX] === SquareContent.FreeSpace) {
+        // update board
+        this.board[randomY][randomX] = SquareContent.Fruit;
+        break;
+      }
+    }
+  }  
+
 }
 
-function updateScore()
-{
-  document.getElementById("score").innerHTML = score * 1000;
-}
-
-setInterval(tick, 100);
-
-
-function tick() {
-  snake.slither();
-  updateScore();
-};
