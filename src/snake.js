@@ -1,27 +1,25 @@
-import lose from './game';
-import options from './options';
-// import Fruit from './fruit';
-import { draw, clear } from './draw';
+import * as options from './options';
+import drawBoard from './draw';
+import {game} from './entry';
+import * as SquareContent from './square-defines';
 
-const collides = (segments, point) => {
-  for (let segment of segments) {
-    if (segment[0] === point[0] && segment[1] === point[1]) {
-      return true;
-    }
-  }
-  return false;
-};
-
-const clear = (square) => {
-  ctx.clearRect(square[0], square[1], options.squareSize, options.squareSize);
-};
-
-class Snake {
+export class Snake {
   constructor() {
-    this.head = [options.initialX, options.initialY];
-    [this.dx, this.dy] = [0, 0];
-    this.segments = [[this.head]];
-    // TODO mouth open or closed
+    this.startRow = options.initialY;
+    this.startCol = options.initialX;
+
+    this.segments = [[this.startRow, this.startCol]];
+    this.desiredlength = 1;
+    
+    [this.dx, this.dy] = [];
+  }
+
+  init() {
+    // let startRow = this.startRow;
+    // let startCol = this.startCol;
+
+    game.board[this.startRow][this.startCol] = SquareContent.Snake;
+    snake.turnRight();
   }
 
   turnRight() {
@@ -36,36 +34,70 @@ class Snake {
   turnDown() {
     [this.dx, this.dy] = [0, 1];
   }
+
+  lose() {
+    console.log('you lost'); 
+    game.newGame();
+  }
+
+  win() {
+    console.log('you won!'); 
+    game.newGame();
+  }
+
   slither() {
     // called on tick, updates snake position
     // move head in direction of latest input
-    console.log(segments);
-    this.head[0] += this.dx;
-    this.head[1] += this.dy;
-    this.segments.push(this.head);
-    // if head intersects walls, game over
-    if (this.head[0] < 0 || this.head[0] >= options.width
-        || this.head[1] < 0 || this.head[1] >= options.height) {
-      lose();
-      return;
+    let nextHeadPosition = [
+      this.segments[this.segments.length - 1][0] + this.dx,
+      this.segments[this.segments.length - 1][1] + this.dy];
+      
+    this.segments.push(nextHeadPosition);
+
+    if (this.segments.length > this.desiredlength)
+    {
+      let tail = this.segments.shift();
+      game.board[tail[1]][tail[0]] = SquareContent.FreeSpace;
+      //this.segments.length -= 1;
+
     }
 
-    // if head intersects segments, game over
-    if (collides(this.segments, this.head)) {
-      lose();
+    let row = this.segments[this.segments.length - 1][1];
+    let col = this.segments[this.segments.length - 1][0];
+
+
+    // if there's a collision, game over
+    let nextSquare = game.board[row][col];
+    switch(nextSquare)
+    {
+      case SquareContent.Wall:
+        this.lose();
+        return;
+
+      case SquareContent.Snake:
+        this.lose();
+        return;
+
+      case SquareContent.Fruit:
+        game.board[row][col] = SquareContent.Snake;
+        this.desiredlength += 3;
+        placeFruit();
+        score += 1;
+        break;
+
+      case SquareContent.FreeSpace:
+        game.board[row][col] = SquareContent.Snake;
+        break;
+    }
+
+    if (this.desiredlength >= game.squaresNeededToWin)
+    {
+      this.win();
       return;
     }
-    draw(this.head, '#000');
-    // head intersects fruit, increment segments and score
-    // if (this.collides(this.head, Game.fruit.location)) {
-    //   Game.score += 1;
-    //   clear(Game.fruit.location);
-    //   let fruit = new Fruit();
-    //   fruit.placeFruit();
-    // // if not, clear last segment of snake
-    // } else {
-    clear(this.segments.shift());
+    
+    // redraw board based on the model
+    drawBoard();
+
   }
 }
-
-export default Snake;

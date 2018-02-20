@@ -1,57 +1,59 @@
-import Snake from './snake';
-import Fruit from './fruit';
-import { draw, redraw } from './draw';
+import { Snake } from './snake';
+import * as options from './options';
+import * as SquareContent from './square-defines';
 
-let score = 0;
-let highScore = 0;
 
-function gameStart() {
-  let snake = new Snake();
-  // let fruit = new Fruit();
-  // Fruit.placeFruit();
+// const SquareContent = {
+//   FreeSpace: 0,
+//   Snake: 1,
+//   Fruit: 2,
+//   Wall: 3,
+// };
 
-  // game loop
-  const tick = (timestamp) => {
-    snake.slither();
-    window.requestAnimationFrame(nextTimestamp => tick(nextTimestamp));
-  };
-  // initialize input event listeners
-  window.onkeydown = (e) => {
-    switch (e.key) {
-      default:
-        break;
-      case 'ArrowDown':
-        snake.turnRight();
-        break;
-      case 'ArrowUp':
-        snake.turnUp();
-        break;
-      case 'ArrowLeft':
-        snake.turnLeft();
-        break;
-      case 'ArrowRight':
-        snake.turnRight();
-        break;
-    }
-  };
-}
-const reset = () => {
-  if (score > highScore) {
-    highScore = score;
+
+export class Game {
+  constructor() {
+    this.board = null;
+    this.score = 0;
+    this.squaresNeededToWin = 0;
   }
-  score = 0;
-  redraw();
-  gameStart();
-};
+  newGame() {
+    this.board = new Array(options.height);
+    for (let row = 0; row < options.width; row++) {
+      this.board[row] = new Array(options.width);
+      for (let col = 0; col < options.height; col++) {
 
-const win = () => {
-  alert('you cheated');
-  reset();
-};
+        // draw walls around the edges
+        if (row == 0 || row == options.height-1 ||
+            col == 0 || col == options.width-1)
+        {
+          this.board[row][col] = SquareContent.Wall;
+        }
+        else  // otherwise it's a free space
+        {
+          this.board[row][col] = SquareContent.FreeSpace;
+          this.squaresNeededToWin++;
+        }
+      }
+    }
 
-const lose = () => {
-  console.log('you lost'); // TODO add score and
-  reset();
-};
+    let snake = new Snake();
+    snake.init();
+    placeFruit();
+    drawBoard();
+    updateScore();
+  }
+}
 
-export { gameStart, win, lose, score, reset };
+function updateScore()
+{
+  document.getElementById("score").innerHTML = score * 1000;
+}
+
+setInterval(tick, 100);
+
+
+function tick() {
+  snake.slither();
+  updateScore();
+};

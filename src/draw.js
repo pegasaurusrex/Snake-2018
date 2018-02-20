@@ -4,26 +4,74 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 canvas.width = options.width;
 canvas.height = options.height;
-ctx.rect(0, 0, canvas.width, canvas.height);
 
-
-const draw = (square, color) => { // TODO shape?
-  
-  let [x, y, w, h] = [square[0] * options.squareSize,
-                      square[1] * options.squareSize,
+const drawSquare = (row, col, color) => {
+  const [x, y, w, h] = [col * options.squareSize,
+                      row * options.squareSize,
                       options.squareSize,
                       options.squareSize,
-                    ];
+                    ].map(Math.round);
   ctx.fillStyle = color;
-  ctx.fillRect(x, y, w, h);
-};
+  ctx.fillRect(x, y, w, h);  
+}
 
-const clear = (square) => {
-  ctx.clearRect(square[0], square[1], options.squareSize, options.squareSize);
-};
+const drawFruit = (row, col) => {
+  drawSquare(row, col, '#ff0000')
+}
 
-const redraw = () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-};
+const drawSnake = (row, col) => {
+  let color = '#00ff00';
+  switch (snake.segments.length % 3)
+  {
+      case 0: color = '#00ff00'; break;
+      case 1: color = '#00ee00'; break;
+      case 2: color = '#00cc00'; break;
+      //case 3: color = '#00ee00'; break;
+      //case 4: color = '#00ff00'; break;
+  }
+  drawSquare(row, col, color)
+}
 
-export default { draw, clear, redraw };
+const drawWall = (row, col) => {
+  drawSquare(row, col, '#303030')
+}
+
+const clearSquare = (row, col) => {
+  drawSquare(row, col, '#ffffff')
+}
+
+function drawBoard()
+{
+  updateScore();
+
+  for (let row = 0; row < options.width; row++) {
+    for (let col = 0; col < options.height; col++) {
+      square = board[row][col];  
+      switch (square)
+      {
+        case SquareContent.Fruit:
+          drawFruit(row, col);
+          break;
+
+          case SquareContent.Snake:
+          drawSnake(row, col);
+          break;
+          
+          case SquareContent.Wall:
+          drawWall(row, col);
+          break;
+
+          case SquareContent.FreeSpace:
+          clearSquare(row, col);
+          break;
+
+          default:
+          console.log("Unknown square type");
+          break;
+      }
+    }
+  }
+}
+
+
+export default drawBoard;
