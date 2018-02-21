@@ -1,0 +1,21 @@
+.canvas-container{
+  width: 400px;
+  margin: 0 auto;
+}
+.main {
+  background-image: url("../assets/background-svg.svg");
+  height: 100vh;
+  width: 100vw;
+}
+canvas {
+  margin: 0 auto;
+  display: block;
+}
+.score {
+  float: left;
+  color: #fff;
+}
+.highScore {
+  float: right;
+  color: #fff;
+}

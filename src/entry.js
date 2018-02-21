@@ -6,6 +6,7 @@ const ctx = canvas.getContext('2d');
 canvas.width = options.width * options.squareSize;
 canvas.height = options.height * options.squareSize;
 
+localStorage.setItem('highScore', 0);
 export let game = new Game();
 game.newGame();
 

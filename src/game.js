@@ -15,6 +15,7 @@ export class Game {
   constructor() {
     this.board = null;
     this.score = 0;
+    this.highScore = localStorage.getItem('highScore');
     this.squaresNeededToWin = 0;
     this.snake = new Snake();
     this.startRow = options.initialY;
@@ -41,14 +42,22 @@ export class Game {
     this.snake.turnRight();
     this.placeFruit();
     drawBoard();
-    this.updateScore();    
+    this.updateScore();
   }
   lose() {
     console.log('you lost');
+    if (this.score > this.highScore) {
+      localStorage.setItem('highScore', this.score);
+      document.getElementById('highScore').innerHTML = "High Score:&nbsp;" + this.score * 1000;
+    }
     this.newGame();
   }
   win() {
     console.log('you won!');
+    if (this.score > this.highScore) {
+      localStorage.setItem('highScore'. this.score);
+      document.getElementById('highScore').innerHTML = "High Score:&nbsp;" + this.score * 1000;
+    }
     this.newGame();
   }
   updateScore(number) {
@@ -57,20 +66,20 @@ export class Game {
     } else {
       this.score = 0;
     }
-    document.getElementById('score').innerHTML = this.score * 1000;
+    document.getElementById('score').innerHTML = "Score:&nbsp;" + this.score * 1000;
   }
 
   placeFruit() {
     while (true) {
-      let randomX = Math.floor(Math.random() * options.width);
-      let randomY = Math.floor(Math.random() * options.height);
+      const randomX = Math.floor(Math.random() * options.width);
+      const randomY = Math.floor(Math.random() * options.height);
       if (this.board[randomY][randomX] === SquareContent.FreeSpace) {
         // update board
         this.board[randomY][randomX] = SquareContent.Fruit;
         break;
       }
     }
-  }  
-
+  }
 }
+
 

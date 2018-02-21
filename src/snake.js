@@ -7,12 +7,12 @@ export class Snake {
   constructor() {
     this.startRow = options.initialY;
     this.startCol = options.initialX;
-
     this.segments = [[this.startRow, this.startCol]];
     this.desiredlength = 1;
     [this.dx, this.dy] = [];
   }
-
+  // TODO BUG: after consuming a segment, pressing reverse direction
+  // direction of snake causes
   turnRight() {
     [this.dx, this.dy] = [1, 0];
   }
