@@ -1,3 +1,9 @@
+Build Instructions:
+ - node and npm installed
+ - npm install
+ - npm run build
+ - open on (local) webserver
+
 Snake Rules:
 - game ticks every x ms updating position of snakes (adding direction to each segment)
   - if snake is [1,1], [1,2], [1,3] and moving down
