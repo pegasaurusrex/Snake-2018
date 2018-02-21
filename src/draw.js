@@ -2,6 +2,7 @@ import * as options from './options';
 import { game } from './entry';
 import * as SquareContent from './square-defines';
 
+// rendering tasks
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 canvas.width = options.width;

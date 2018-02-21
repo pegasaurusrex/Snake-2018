@@ -1,3 +1,4 @@
+body {overflow: hidden;}
 .canvas-container{
   width: 400px;
   margin: 0 auto;
@@ -18,4 +19,22 @@ canvas {
 .highScore {
   float: right;
   color: #fff;
+}
+.gameOver {
+  display: none;
+  position: absolute;
+  left: 42%;
+  top: 100px;
+  z-index: 9;
+  border: 1px solid #000;
+  padding: 10px;
+  background: #fff;
+}
+.gameOver.is-visible {
+  display: block;
+}
+.confirmDialog {
+  display: block;
+  margin: 0 auto;
+  padding: 5px;
 }

@@ -35,15 +35,14 @@ export class Snake {
     if (this.segments.length > this.desiredlength) {
       let tail = this.segments.shift();
       game.board[tail[1]][tail[0]] = SquareContent.FreeSpace;
-      // this.segments.length -= 1;
     }
 
     let row = this.segments[this.segments.length - 1][1];
     let col = this.segments[this.segments.length - 1][0];
 
-
-    // if there's a collision, game over
+    // resolve collision conditions (or not)
     let nextSquare = game.board[row][col];
+    // if collision with snake or wall, lose
     switch (nextSquare) {
       case SquareContent.Wall:
         game.lose();
@@ -52,14 +51,14 @@ export class Snake {
       case SquareContent.Snake:
         game.lose();
         return;
-
+      // if collision with fruit, increment score, snake length
       case SquareContent.Fruit:
         game.board[row][col] = SquareContent.Snake;
         this.desiredlength += 3;
         game.placeFruit();
         game.updateScore(1);
         break;
-
+      // if not, do nothing
       case SquareContent.FreeSpace:
         game.board[row][col] = SquareContent.Snake;
         break;
@@ -67,7 +66,7 @@ export class Snake {
         console.log('unknown square type collision');
         break;
     }
-
+    // if there aren't any more free squares, win
     if (this.desiredlength >= game.squaresNeededToWin) {
       game.win();
       return;

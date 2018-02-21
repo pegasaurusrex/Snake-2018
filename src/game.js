@@ -2,14 +2,7 @@ import { Snake } from './snake';
 import * as options from './options';
 import * as SquareContent from './square-defines';
 import drawBoard from './draw';
-
-// const SquareContent = {
-//   FreeSpace: 0,
-//   Snake: 1,
-//   Fruit: 2,
-//   Wall: 3,
-// };
-
+import { startInterval, stopInterval } from './entry';
 
 export class Game {
   constructor() {
@@ -41,24 +34,38 @@ export class Game {
     this.snake = new Snake();
     this.snake.turnRight();
     this.placeFruit();
+    document.getElementById('confirmDialog').addEventListener('click', this.confirmDialog);
     drawBoard();
     this.updateScore();
   }
   lose() {
-    console.log('you lost');
+    document.getElementById('dialogText').innerHTML = "You Lose. Final Score:&nbsp;" + (this.score * 1000);
+    this.toggleDialog();
     if (this.score > this.highScore) {
       localStorage.setItem('highScore', this.score);
-      document.getElementById('highScore').innerHTML = "High Score:&nbsp;" + this.score * 1000;
+      document.getElementById('highScore').innerHTML = 'High Score:&nbsp;' + (this.score * 1000);
     }
     this.newGame();
   }
   win() {
-    console.log('you won!');
+    document.getElementById('dialogText').innerHTML = "You Win (cheater). Final Score:&nbsp;" + (this.score * 1000);
+    this.toggleDialog();
     if (this.score > this.highScore) {
       localStorage.setItem('highScore'. this.score);
-      document.getElementById('highScore').innerHTML = "High Score:&nbsp;" + this.score * 1000;
+      document.getElementById('highScore').innerHTML = 'High Score:&nbsp;' + (this.score * 1000);
     }
     this.newGame();
+  }
+  // show/hide game over dialog
+  toggleDialog() {
+    document.getElementById('gameOver').classList.toggle('is-visible');
+    stopInterval();
+  }
+  // restart game loop
+  confirmDialog() {
+    startInterval();
+    // window.setInterval(entry.tick, 100);
+    document.getElementById('gameOver').classList.toggle('is-visible');
   }
   updateScore(number) {
     if (number === 1) {
@@ -66,9 +73,9 @@ export class Game {
     } else {
       this.score = 0;
     }
-    document.getElementById('score').innerHTML = "Score:&nbsp;" + this.score * 1000;
+    document.getElementById('score').innerHTML = 'Score:&nbsp;' + (this.score * 1000);
   }
-
+  // place fruit randomly in any square not occupied
   placeFruit() {
     while (true) {
       const randomX = Math.floor(Math.random() * options.width);
@@ -81,5 +88,3 @@ export class Game {
     }
   }
 }
-
-
