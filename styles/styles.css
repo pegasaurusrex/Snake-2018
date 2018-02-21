@@ -1,7 +1,12 @@
-body {overflow: hidden;}
-.canvas-container{
+body {
+  overflow: hidden;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.canvas-container {
+  position: relative;
   width: 400px;
   margin: 0 auto;
+  padding-top: 100px;
 }
 .main {
   background-image: url("../assets/background-svg.svg");
@@ -22,19 +27,22 @@ canvas {
 }
 .gameOver {
   display: none;
-  position: absolute;
-  left: 42%;
-  top: 100px;
+  position: relative;
+  top: 180px;
+  margin: 0 auto;
+  width: 40%;
   z-index: 9;
   border: 1px solid #000;
   padding: 10px;
   background: #fff;
+  text-align: center;
+
 }
 .gameOver.is-visible {
   display: block;
 }
 .confirmDialog {
   display: block;
-  margin: 0 auto;
-  padding: 5px;
+  margin: 3px auto;
+  padding: 6px;
 }

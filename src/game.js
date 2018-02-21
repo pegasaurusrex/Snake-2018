@@ -39,7 +39,7 @@ export class Game {
     this.updateScore();
   }
   lose() {
-    document.getElementById('dialogText').innerHTML = "You Lose. Final Score:&nbsp;" + (this.score * 1000);
+    document.getElementById('dialogText').innerHTML = "You Lose. <br/> Final Score:&nbsp;" + (this.score * 1000);
     this.toggleDialog();
     if (this.score > this.highScore) {
       localStorage.setItem('highScore', this.score);
@@ -48,7 +48,7 @@ export class Game {
     this.newGame();
   }
   win() {
-    document.getElementById('dialogText').innerHTML = "You Win (cheater). Final Score:&nbsp;" + (this.score * 1000);
+    document.getElementById('dialogText').innerHTML = "You Win (cheater). <br/> Final Score:&nbsp;" + (this.score * 1000);
     this.toggleDialog();
     if (this.score > this.highScore) {
       localStorage.setItem('highScore'. this.score);
